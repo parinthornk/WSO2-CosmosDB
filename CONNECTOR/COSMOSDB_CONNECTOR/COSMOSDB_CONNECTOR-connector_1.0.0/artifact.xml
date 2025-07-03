@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><artifact name="COSMOSDB_CONNECTOR-connector" version="1.0.0" type="synapse/lib" serverRole="EnterpriseServiceBus">
+    <file>CosmosDB-connector-1.0.0.zip</file>
+</artifact>

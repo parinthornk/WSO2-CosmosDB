@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="DEFAULT" xmlns="http://ws.apache.org/ns/synapse">
+	<parameter defaultValue="" isMandatory="false" name="searchQuery"/>
+	<sequence>
+		<class name="com.pttdigital.CosmosDB.Main"/>
+		<property expression="$ctx:ftpStatusCode" name="HTTP_SC" scope="axis2" type="STRING"/>
+		<payloadFactory media-type="json">
+			<format>$1</format>
+			<args>
+				<arg evaluator="xml" expression="$ctx:wresponse"/>
+			</args>
+		</payloadFactory>
+	</sequence>
+</template>

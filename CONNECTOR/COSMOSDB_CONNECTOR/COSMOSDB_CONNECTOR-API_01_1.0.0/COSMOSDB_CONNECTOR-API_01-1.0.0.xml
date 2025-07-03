@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/COSMOSDB_CONNECTOR" name="COSMOSDB_CONNECTOR-API_01" xmlns="http://ws.apache.org/ns/synapse">
+	<resource methods="DELETE POST PATCH GET">
+		<inSequence>
+			<CosmosDB.DEFAULT/>
+			<respond/>
+		</inSequence>
+		<outSequence/>
+		<faultSequence/>
+	</resource>
+</api>
