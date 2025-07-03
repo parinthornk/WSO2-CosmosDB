@@ -92,25 +92,31 @@ public class Main extends AbstractConnector {
 		} catch (Exception ex) { }
 		return query_string;
 	}
-
+	
 	@Override
 	public void connect(MessageContext messageContext) throws ConnectException {
 		
 	}
-
+	
 	private void submit_result(MessageContext messageContext, Result result) {
 		int response_code = result.statusCode;
 		if (response_code < 199) {
 			response_code = 500;
 			JsonObject er = new JsonObject();
-			er.addProperty("message", "Internal server error");
+			
+			if (result.exception != null) {
+				er.addProperty("message", result.exception.getMessage());
+			} else {
+				er.addProperty("message", "Internal server error");
+			}
+			
 			messageContext.setProperty("wresponse", er.toString());
 		} else {
 			messageContext.setProperty("wresponse", result.content);
 		}
 		messageContext.setProperty("ftpStatusCode", response_code);
 	}
-
+	
 	@Override
 	public boolean mediate(MessageContext messageContext) {
 		
@@ -134,7 +140,7 @@ public class Main extends AbstractConnector {
 			
 			ex.printStackTrace();
 			
-			submit_result(messageContext, new Result());
+			submit_result(messageContext, Result.getResult(ex));
 			
 		}
 		

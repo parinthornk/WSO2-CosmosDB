@@ -12,17 +12,7 @@ import com.google.gson.JsonObject;
 public class FunctionHandler {
 	public Result getResult(String path, String method, Map<String, String> headers, Map<String, String> query_params) throws Exception {
 		
-		{
-			System.out.println("----------------");
-			Set<String> ks = headers.keySet();
-			for (String hn : ks) {
-				String hv = headers.get(hn);
-				System.out.println("header: hn[" + hn + "], hv[" + hv + "]");
-			}
-			System.out.println("----------------");
-		}
-		
-		System.out.println("java.version: " + System.getProperty("java.version"));
+		String current_action = "start";
 		
 		if (!method.equalsIgnoreCase("get")) {
 			
@@ -38,68 +28,77 @@ public class FunctionHandler {
 			
 		}
 		
-		String database_name = ps[1];
-		
-		String container_name = ps[2];
-		
-		int offset = 0;
-		
-		int limit = 100;
-		
-		if (query_params != null) {
-			
-			try {
-				
-				offset = Integer.parseInt(query_params.get("offset"));
-				
-			} catch (Exception ex) { }
-			
-			try {
-				
-				limit = Integer.parseInt(query_params.get("limit"));
-				
-			} catch (Exception ex) { }
-			
-		}
-		
-		String cosmos_db_endpoint = "";
-		
-		String cosmos_db_access_key = "";
-		
 		try {
 			
-			String b64 = headers.get("Authorization").replace("Basic ", "");
+			current_action = "String database_name = ps[1];";
+			String database_name = ps[1];
 			
-			String decodedStr = new String(Base64.getDecoder().decode(b64));
+			current_action = "String container_name = ps[2];";
+			String container_name = ps[2];
 			
-			String[] s2 = decodedStr.split(":");
+			int offset = 0;
 			
-			String _x_cosmos_db_access_key = s2[s2.length - 1];
+			int limit = 100;
 			
-			String _x_cosmos_db_endpoint = decodedStr.substring(0, decodedStr.length() - (":" + _x_cosmos_db_access_key).length());
-			
-			if (!_x_cosmos_db_endpoint.startsWith("https://")) {
-				_x_cosmos_db_endpoint = "https://" + _x_cosmos_db_endpoint;
+			if (query_params != null) {
+				
+				try {
+					
+					offset = Integer.parseInt(query_params.get("offset"));
+					
+				} catch (Exception ex) { }
+				
+				try {
+					
+					limit = Integer.parseInt(query_params.get("limit"));
+					
+				} catch (Exception ex) { }
+				
 			}
 			
-			cosmos_db_endpoint = _x_cosmos_db_endpoint;
+			String cosmos_db_endpoint = "";
 			
-			cosmos_db_access_key = _x_cosmos_db_access_key;
+			String cosmos_db_access_key = "";
+			
+			try {
+				
+				String b64 = headers.get("Authorization").replace("Basic ", "");
+				
+				String decodedStr = new String(Base64.getDecoder().decode(b64));
+				
+				String[] s2 = decodedStr.split(":");
+				
+				String _x_cosmos_db_access_key = s2[s2.length - 1];
+				
+				String _x_cosmos_db_endpoint = decodedStr.substring(0, decodedStr.length() - (":" + _x_cosmos_db_access_key).length());
+				
+				if (!_x_cosmos_db_endpoint.startsWith("https://")) {
+					_x_cosmos_db_endpoint = "https://" + _x_cosmos_db_endpoint;
+				}
+				
+				cosmos_db_endpoint = _x_cosmos_db_endpoint;
+				
+				cosmos_db_access_key = _x_cosmos_db_access_key;
+				
+			} catch (Exception ex) {
+				
+			}
+			
+			String query = "SELECT * FROM " + container_name + " OFFSET " + offset + " LIMIT " + limit;
+			
+			current_action = "String response_body = new CosmosHandler().query(" + cosmos_db_endpoint + ", " + cosmos_db_access_key + ", " + database_name + ", " + container_name + ", " + query + ").toString();";
+			String response_body = new CosmosHandler().query(cosmos_db_endpoint, cosmos_db_access_key, database_name, container_name, query).toString();
+			
+			Result r = new Result();
+			
+			r.statusCode = 200;
+			
+			r.content = response_body;
+			
+			return r;
 			
 		} catch (Exception ex) {
-			
+			throw new Exception("error while " + current_action + ", " + ex.getMessage());
 		}
-		
-		String query = "SELECT * FROM " + container_name + " OFFSET " + offset + " LIMIT " + limit;
-		
-		String response_body = new CosmosHandler().query(cosmos_db_endpoint, cosmos_db_access_key, database_name, container_name, query).toString();
-		
-		Result r = new Result();
-		
-		r.statusCode = 200;
-		
-		r.content = response_body;
-		
-		return r;
 	}
 }

@@ -76,18 +76,5 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		
-		System.out.println("java.version: " + System.getProperty("java.version"));
-		
-		String cosmos_db_endpoint = "https://<YOUR_ENDPOINT>.documents.azure.com";
-		String cosmos_db_access_key = "<YOUR_ACCESS_KEY>";
-		String databaseName = "<YOUR_DATABASE_NAME>";
-		String containerName = "<YOUR_CONTAINER_NAME>";
-		String query = "SELECT * FROM " + containerName + " WHERE " + containerName + ".GUID = \"8d7c76e9-9dbd-4d41-8b2d-cd791956d0f4\" OFFSET 0 LIMIT 10 ";
-		
-		JsonArray arr = new Main().query(cosmos_db_endpoint, cosmos_db_access_key, databaseName, containerName, query);
-		Files.writeString(Path.of("arr.json"), arr.toString());
-		
-		System.out.println("arr.size(): " + arr.size());
 	}
 }
