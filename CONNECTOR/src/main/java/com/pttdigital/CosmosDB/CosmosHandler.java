@@ -51,7 +51,7 @@ public class CosmosHandler {
 			JsonArray arr = new JsonArray();
 			
 			current_action = "cosmosClient = new CosmosClientBuilder().endpoint(" + cosmos_db_endpoint + ").key(" + cosmos_db_access_key + ").consistencyLevel(ConsistencyLevel.EVENTUAL).buildClient();";
-			cosmosClient = new CosmosClientBuilder().endpoint(cosmos_db_endpoint).key(cosmos_db_access_key).consistencyLevel(ConsistencyLevel.EVENTUAL).buildClient();
+			cosmosClient = new CosmosClientBuilder().endpoint(cosmos_db_endpoint).key(cosmos_db_access_key).consistencyLevel(ConsistencyLevel.EVENTUAL).gatewayMode().buildClient();
 			
 			current_action = "CosmosDatabase cosmosDatabase = cosmosClient.getDatabase(" + databaseName + ");";
 			CosmosDatabase cosmosDatabase = cosmosClient.getDatabase(databaseName);

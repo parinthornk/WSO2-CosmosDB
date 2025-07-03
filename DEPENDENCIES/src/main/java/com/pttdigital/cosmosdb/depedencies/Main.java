@@ -48,7 +48,7 @@ public class Main {
 			
 			JsonArray arr = new JsonArray();
 			
-			cosmosClient = new CosmosClientBuilder().endpoint(cosmos_db_endpoint).key(cosmos_db_access_key).consistencyLevel(ConsistencyLevel.EVENTUAL).buildClient();
+			cosmosClient = new CosmosClientBuilder().endpoint(cosmos_db_endpoint).key(cosmos_db_access_key).consistencyLevel(ConsistencyLevel.EVENTUAL).gatewayMode().buildClient();
 			CosmosDatabase cosmosDatabase = cosmosClient.getDatabase(databaseName);
 			CosmosContainer cosmosContainer = cosmosDatabase.getContainer(containerName);
 			CosmosQueryRequestOptions options = new CosmosQueryRequestOptions();
